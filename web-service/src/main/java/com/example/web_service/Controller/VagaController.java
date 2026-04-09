@@ -42,4 +42,22 @@ public class VagaController {
         vagas.add(v);
         return v;
     }
+
+    @PutMapping("/{id}")
+    public Vaga update(@PathVariable long id, @RequestBody Vaga vAtt) {
+        for (Vaga v : vagas) {
+            if (v.getId() == id) {
+                v.setTitulo(vAtt.getTitulo());
+                v.setDescricao(vAtt.getDescricao());
+                v.setSalario(vAtt.getSalario());
+                return v;
+            }
+        }
+        return null;
+    }
+
+    @DeleteMapping("/{id}")
+    public String delete(@PathVariable long id) {
+        return vagas.removeIf(v -> v.getId() == id) ? "Vaga removida." : "Não encontrada.";
+    }
 }

@@ -40,4 +40,22 @@ public class EmpresaController {
         empresas.add(e);
         return e;
     }
+
+
+    @PutMapping("/{id}")
+    public Empresa update(@PathVariable long id, @RequestBody Empresa eAtt) {
+        for (Empresa e : empresas) {
+            if (e.getId() == id) {
+                e.setNome(eAtt.getNome());
+                e.setCnpj(eAtt.getCnpj());
+                return e;
+            }
+        }
+        return null;
+    }
+
+    @DeleteMapping("/{id}")
+    public String delete(@PathVariable long id) {
+        return empresas.removeIf(e -> e.getId() == id) ? "Empresa removida." : "Não encontrada.";
+    }
 }
