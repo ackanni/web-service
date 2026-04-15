@@ -1,83 +1,49 @@
-package ps2.teoriab1;
-
-import java.util.ArrayList;
-import java.util.List;
+package com.example.web_service.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import com.example.web_service.DAO.EmpresaDAO;
 import com.example.web_service.Model.Empresa;
 
 @RestController
+@RequestMapping("/api/empresas")
 public class EmpresaController {
-    @Autowired;
+
+    @Autowired
     private EmpresaDAO empresaDAO;
 
-
-
-    public EmpresaController() {
-    }  
-    @GetMapping("/api/empresas")
-    public Iterable<Empresa> getEmpresas() {
+    // LISTAR TODAS
+    @GetMapping
+    public Iterable<Empresa> listar() {
         return empresaDAO.findAll();
     }
 
-    @GetMapping("/api/empresas/{id}")
-    public Empresa getEmpresa(@PathVariable long id) {
+    // BUSCAR POR ID
+    @GetMapping("/{id}")
+    public Empresa buscar(@PathVariable Long id) {
         return empresaDAO.findById(id).orElse(null);
     }
 
-    @PostMapping("/api/empresas")
-    public Empresa create(@RequestBody Empresa e) {
-        return empresaDAO.save(e);
+    // CRIAR
+    @PostMapping
+    public Empresa criar(@RequestBody Empresa empresa) {
+        return empresaDAO.save(empresa);
     }
 
-    @PutMapping("/api/empresas/{id}")
-    public Empresa update(@PathVariable long id, @RequestBody Empresa eAtt) {
-        return empresaDAO.findById(id).map(e -> {
-            e.setNome(eAtt.getNome());
-            e.setCnpj(eAtt.getCnpj());
-            return empresaDAO.save(e);
-        }).orElse(null);
-    }
-
-    @DeleteMapping("/api/empresas/{id}")
-    public String delete(@PathVariable long id) {
-        empresaDAO.deleteById(id);
-        return "Empresa removida.";
-    }
-}
-            if (id == emp.getId()) return emp;
-        }
-        return null;
-    }
-
-    @PostMapping("/api/empresas")
-    public Empresa create(@RequestBody Empresa e) {
-        long maior = 0;
-        for (Empresa emp : empresas) {
-            if (emp.getId() > maior) maior = emp.getId();
-        }
-        e.setId(maior + 1);
-        empresas.add(e);
-        return e;
-    }
-
-
+    // ATUALIZAR
     @PutMapping("/{id}")
-    public Empresa update(@PathVariable long id, @RequestBody Empresa eAtt) {
-        for (Empresa e : empresas) {
-            if (e.getId() == id) {
-                e.setNome(eAtt.getNome());
-                e.setCnpj(eAtt.getCnpj());
-                return e;
-            }
+    public Empresa atualizar(@PathVariable Long id, @RequestBody Empresa empresa) {
+        if (empresaDAO.existsById(id)) {
+            empresa.setId(id);
+            return empresaDAO.save(empresa);
         }
         return null;
     }
 
+    // DELETAR
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable long id) {
-        return empresas.removeIf(e -> e.getId() == id) ? "Empresa removida." : "Não encontrada.";
+    public void deletar(@PathVariable Long id) {
+        empresaDAO.deleteById(id);
     }
 }

@@ -1,8 +1,5 @@
 package com.example.web_service.Controller;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,74 +7,43 @@ import com.example.web_service.DAO.EstudanteDAO;
 import com.example.web_service.Model.Estudante;
 
 @RestController
+@RequestMapping("/api/estudantes")
 public class EstudanteController {
-    @Autowired;
+
+    @Autowired
     private EstudanteDAO estudanteDAO;
 
-
-    public EstudanteController() {
-    }
-    
-    @GetMapping("/api/estudantes")
-    public Iterable<Estudante> getAllEstudantes() {
-        return this.estudanteDAO.findAll();
+    // LISTAR TODOS
+    @GetMapping
+    public Iterable<Estudante> listar() {
+        return estudanteDAO.findAll();
     }
 
-    @GetMapping("/api/estudantes/{id}")
-    public Estudante getEstudanteById(@PathVariable long id) {
-        return this.estudanteDAO.findById(id).get();
+    // BUSCAR POR ID
+    @GetMapping("/{id}")
+    public Estudante buscar(@PathVariable Long id) {
+        return estudanteDAO.findById(id).orElse(null);
     }
 
-    @PostMapping("/api/estudantes")
-    public Estudante create(@RequestBody Estudante e) {
-        long maior = 0;
-        for (Estudante est : estudantes) {
-            if (est.getId() > maior) maior = est.getId();
+    // CRIAR
+    @PostMapping
+    public Estudante criar(@RequestBody Estudante estudante) {
+        return estudanteDAO.save(estudante);
+    }
+
+    // ATUALIZAR
+    @PutMapping("/{id}")
+    public Estudante atualizar(@PathVariable Long id, @RequestBody Estudante estudante) {
+        if (estudanteDAO.existsById(id)) {
+            estudante.setId(id);
+            return estudanteDAO.save(estudante);
         }
-        e.setId(maior + 1);
-        estudantes.add(e);
-        return e;
+        return null;
     }
 
-    // --- POST (Criar) ---
-    @PostMapping("/mackenzie/alunos")
-    public Estudante create(@RequestBody Estudante e){
-        long maior = 0;
-        for(Estudante estudante : estudantes){
-            if (estudante.getId() > maior){
-                maior = estudante.getId();
-            }
-        }
-        e.setId(maior + 1);
-        estudantes.add(e);
-        return e;
-    }
-
-    // --- PUT (Atualizar) ---
-    @PutMapping("/mackenzie/alunos/{id}")
-    public Estudante update(@PathVariable long id, @RequestBody Estudante estudanteAtualizado) {
-        for (Estudante e : estudantes) {
-            if (e.getId() == id) {
-                e.setNome(estudanteAtualizado.getNome());
-                e.setRa(estudanteAtualizado.getRa());
-                e.setCurso(estudanteAtualizado.getCurso());
-                return e; // Retorna o estudante atualizado
-            }
-        }
-        return null; // Retorna null se não encontrar o estudante
-    }
-
-    // --- DELETE (Remover) ---
-    @DeleteMapping("/mackenzie/alunos/{id}")
-    public String delete(@PathVariable long id) {
-        // Usa o método removeIf do Java 8+ para remover caso o ID bata
-        boolean removido = estudantes.removeIf(e -> e.getId() == id);
-        
-        if (removido) {
-            return "Estudante com ID " + id + " removido com sucesso.";
-        } else {
-            return "Estudante com ID " + id + " não encontrado.";
-        }
+    // DELETAR
+    @DeleteMapping("/{id}")
+    public void deletar(@PathVariable Long id) {
+        estudanteDAO.deleteById(id);
     }
 }
-    

@@ -1,8 +1,5 @@
 package com.example.web_service.Controller;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,52 +7,43 @@ import com.example.web_service.DAO.VagaDAO;
 import com.example.web_service.Model.Vaga;
 
 @RestController
+@RequestMapping("/api/vagas")
 public class VagaController {
-    @Autowired;
+
+    @Autowired
     private VagaDAO vagaDAO;
 
-    public VagaController() {
+    // LISTAR TODAS
+    @GetMapping
+    public Iterable<Vaga> listar() {
+        return vagaDAO.findAll();
     }
 
-    @GetMapping("/api/vagas")
-    public List<Vaga> getVagas() {
-        return vagas;
+    // BUSCAR POR ID
+    @GetMapping("/{id}")
+    public Vaga buscar(@PathVariable Long id) {
+        return vagaDAO.findById(id).orElse(null);
     }
 
-    @GetMapping("/api/vagas/{id}")
-    public Vaga getVaga(@PathVariable long id) {
-        for (Vaga v : vagas) {
-            if (id == v.getId()) return v;
-        }
-        return null;
+    // CRIAR
+    @PostMapping
+    public Vaga criar(@RequestBody Vaga vaga) {
+        return vagaDAO.save(vaga);
     }
 
-    @PostMapping("/api/vagas")
-    public Vaga create(@RequestBody Vaga v) {
-        long maior = 0;
-        for (Vaga vaga : vagas) {
-            if (vaga.getId() > maior) maior = vaga.getId();
-        }
-        v.setId(maior + 1);
-        vagas.add(v);
-        return v;
-    }
-
+    // ATUALIZAR
     @PutMapping("/{id}")
-    public Vaga update(@PathVariable long id, @RequestBody Vaga vAtt) {
-        for (Vaga v : vagas) {
-            if (v.getId() == id) {
-                v.setTitulo(vAtt.getTitulo());
-                v.setDescricao(vAtt.getDescricao());
-                v.setSalario(vAtt.getSalario());
-                return v;
-            }
+    public Vaga atualizar(@PathVariable Long id, @RequestBody Vaga vaga) {
+        if (vagaDAO.existsById(id)) {
+            vaga.setId(id);
+            return vagaDAO.save(vaga);
         }
         return null;
     }
 
+    // DELETAR
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable long id) {
-        return vagas.removeIf(v -> v.getId() == id) ? "Vaga removida." : "Não encontrada.";
+    public void deletar(@PathVariable Long id) {
+        vagaDAO.deleteById(id);
     }
 }
