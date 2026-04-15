@@ -1,6 +1,11 @@
-package com.example.web_service.model;
+package com.example.web_service.Model;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 
+@Entity
 public class Estudante {
+    @Id@GeneratedValue
     private Long id;
     private String nome;
     private String email;
@@ -8,14 +13,6 @@ public class Estudante {
     private Integer anoIngresso;
 
     public Estudante() {
-    }
-
-    public Estudante(Long id, String nome, String email, String nascimento, Integer anoIngresso) {
-        this.id = id;
-        this.nome = nome;
-        this.email = email;
-        this.nascimento = nascimento;
-        this.anoIngresso = anoIngresso;
     }
 
     public Long getId() { return id; }

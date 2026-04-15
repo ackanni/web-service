@@ -1,19 +1,19 @@
-package com.example.web_service.model;
+package com.example.web_service.Model;
 
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+
+@Entity
 public class Empresa {
+    @Id @GeneratedValue
     private Long id;
     private String nome;
     private String cnpj;
     private String emailContato; // Novo atributo da tabela
 
     public Empresa() {
-    }
-
-    public Empresa(Long id, String nome, String cnpj, String emailContato) {
-        this.id = id;
-        this.nome = nome;
-        this.cnpj = cnpj;
-        this.emailContato = emailContato;
     }
 
     public Long getId() { return id; }

@@ -1,6 +1,10 @@
-package com.example.web_service.model;
+package com.example.web_service.Model;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 
 public class Vaga {
+    @Id @GeneratedValue
     private Long id;
     private String titulo;
     private String descricao;
@@ -9,15 +13,6 @@ public class Vaga {
     private Long idEmpresa;
 
     public Vaga() {
-    }
-
-    public Vaga(Long id, String titulo, String descricao, String publicacao, Boolean ativo, Long idEmpresa) {
-        this.id = id;
-        this.titulo = titulo;
-        this.descricao = descricao;
-        this.publicacao = publicacao;
-        this.ativo = ativo;
-        this.idEmpresa = idEmpresa;
     }
 
     public Long getId() { return id; }

@@ -1,22 +1,20 @@
-package ps2.teoriab1;
+package com.example.web_service.Controller;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import com.example.web_service.DAO.VagaDAO;
+import com.example.web_service.Model.Vaga;
 
 @RestController
 public class VagaController {
-    private List<Vaga> vagas;
+    @Autowired;
+    private VagaDAO vagaDAO;
 
     public VagaController() {
-        vagas = new ArrayList<>();
-        vagas.add(new Vaga(1L, "Desenvolvedor Java", "Atuação em projetos backend...", "2025-10-01", true, 1L));
-        vagas.add(new Vaga(2L, "Analista de Suporte Técnico", "Suporte a clientes...", "2025-09-27", true, 2L));
-        vagas.add(new Vaga(3L, "Engenheiro de Software", "Desenvolvimento de soluções...", "2025-10-03", false, 3L));
-        vagas.add(new Vaga(4L, "Analista de Dados", "Manipulação e análise...", "2025-09-18", true, 4L));
-        vagas.add(new Vaga(5L, "Designer Digital", "Criação de materiais...", "2025-09-30", false, 5L));
-        vagas.add(new Vaga(6L, "Consultor de Projetos", "Elaboração e acompanhamento...", "2025-10-06", true, 1L));
-        vagas.add(new Vaga(7L, "Programador Full Stack", "Desenvolvimento de aplicações...", "2025-10-04", true, 2L));
     }
 
     @GetMapping("/api/vagas")
